@@ -277,6 +277,16 @@ class SessionStartTests(unittest.TestCase):
         result = self.run_hook(raw=payload)
         self.assertIsNone(result)
 
+    def test_antigravity_pre_invocation_skips_subsequent_turns(self):
+        state = self.state()
+        payload = json.dumps({
+            "workspacePaths": [str(self.project)],
+            "invocationNum": 2,
+            "conversationId": "test-convo-123"
+        })
+        result = self.run_hook(raw=payload)
+        self.assertIsNone(result)
+
 
 if __name__ == "__main__":
     unittest.main()

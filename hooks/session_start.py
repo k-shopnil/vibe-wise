@@ -52,6 +52,11 @@ def restore(payload):
     is_antigravity = "workspacePaths" in payload or "invocationNum" in payload
     is_claude = payload.get("hook_event_name") == "SessionStart"
 
+    # Antigravity fires PreInvocation before every turn.
+    # Only inject bootstrap instructions on the first invocation (session start / resume).
+    if is_antigravity and payload.get("invocationNum", 1) != 1:
+        return None
+
     raw_cwd = None
     if is_antigravity and "workspacePaths" in payload and payload["workspacePaths"]:
         raw_cwd = payload["workspacePaths"][0]
